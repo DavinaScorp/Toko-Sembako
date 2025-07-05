@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daftar Produk - Toko Sembako Vina</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f8f1e9;
+      color: #4b2e1e;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      height: 80px;
+    }
+
+    .logo span {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #7a5e42;
+    }
+
+    h2 {
+      color: #7a5e42;
+      border-bottom: 3px solid #d1bfa3;
+      padding-bottom: 12px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      font-size: 2.2rem;
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .product-item {
+      background: #fff;
+      padding: 20px;
+      border: 2px solid #d1bfa3;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .product-item img {
+      height: 120px;
+      margin-bottom: 10px;
+      object-fit: cover;
+    }
+
+    .product-item h3 {
+      margin: 10px 0 5px;
+      color: #7a5e42;
+    }
+
+    .product-item .price {
+      font-weight: bold;
+      color: #a0522d;
+      margin-bottom: 10px;
+    }
+
+    .product-item button {
+      background-color: #7a5e42;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .product-item button:hover {
+      background-color: #5a3f2a;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">
+    <img src="logo.png" alt="Logo">
+    <span>TOKO SEMBAKO VINA</span>
+  </div>
+
+  <h2>Daftar Produk Sembako</h2>
+
+  <div class="product-list" id="productList"></div>
+
+  <script>
+    const products = [
+      { nama: "Beras Dua Tani", harga: 90000, gambar: "beras.png" },
+      { nama: "Gula Gendisku", harga: 11000, gambar: "gula.png" },
+      { nama: "Minyak Goreng Forvita", harga: 31000, gambar: "minyak goreng.png" },
+      { nama: "Garam Aji Cap Koki", harga: 2000, gambar: "garam.png" },
+      { nama: "Susu Mujigae by Wonhae", harga: 10000, gambar: "susu.png" },
+      { nama: "Tepung Terigu Gerbang", harga: 12000, gambar: "tepung.png" },
+      { nama: "Mie Instan Prima Taste", harga: 50000, gambar: "mie.png" },
+      { nama: "Daging Japfa Food", harga: 80000, gambar: "daging.png" }
+    ];
+
+    const list = document.getElementById("productList");
+
+    products.forEach(p => {
+      const item = document.createElement("div");
+      item.className = "product-item";
+      item.innerHTML = `
+        <img src="${p.gambar}" alt="${p.nama}">
+        <h3>${p.nama}</h3>
+        <p class="price">Rp${p.harga.toLocaleString()}</p>
+        <button onclick="addToCart('${p.nama}', ${p.harga})">Masukkan Keranjang</button>
+      `;
+      list.appendChild(item);
+    });
+
+    function addToCart(nama, harga) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push({ nama, harga });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`${nama} ditambahkan ke keranjang.`);
+    }
+  </script>
+
+</body>
+</html>

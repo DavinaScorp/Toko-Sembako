@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout - Toko Sembako Vina</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f0e6;
+      color: #4b2e1e;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #jam {
+      align-self: flex-end;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #7a5e42;
+      margin-bottom: 10px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .logo img {
+      height: 80px;
+    }
+
+    .logo span {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #7a5e42;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      max-width: 800px;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 30px;
+    }
+
+    th, td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #e2c9aa;
+      color: #4b2e1e;
+    }
+
+    .total {
+      font-weight: bold;
+      text-align: right;
+      padding: 15px;
+    }
+
+    form {
+      width: 100%;
+      max-width: 600px;
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #7a5e42;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 2px solid #d1bfa3;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    .btn {
+      background-color: #7a5e42;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .btn:hover {
+      background-color: #5d4732;
+    }
+
+    .btn-danger {
+      background-color: #c0392b;
+    }
+
+    .btn-danger:hover {
+      background-color: #962d22;
+    }
+
+    .empty-msg {
+      font-style: italic;
+      color: #999;
+      margin-bottom: 30px;
+    }
+
+    .tabel-container {
+      width: 100%;
+      max-width: 800px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="jam">Waktu saat ini: --:--:--</div>
+
+  <div class="logo">
+    <img src="logo.png" alt="Logo">
+    <span>TOKO SEMBAKO VINA</span>
+  </div>
+
+  <h2>Checkout</h2>
+
+  <div id="keranjang"></div>
+
+  <form id="checkoutForm">
+    <label for="nama">Nama Lengkap</label>
+    <input type="text" id="nama" required>
+
+    <label for="telepon">No Telepon</label>
+    <input type="tel" id="telepon" required>
+
+    <label for="alamat">Alamat Lengkap</label>
+    <input type="text" id="alamat" required>
+
+    <button type="submit" class="btn">Selesaikan Checkout</button>
+    <button type="button" class="btn btn-danger" onclick="batalPesanan()">Batal Pesanan</button>
+  </form>
+
+  <div class="tabel-container">
+    <table id="tabelPesanan" style="display:none">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Telepon</th>
+          <th>Alamat</th>
+          <th>Total</th>
+          <th>Waktu</th>
+        </tr>
+      </thead>
+      <tbody id="tabelBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    function tampilkanJam() {
+      const waktu = new Date();
+      const jam = waktu.getHours().toString().padStart(2, '0');
+      const menit = waktu.getMinutes().toString().padStart(2, '0');
+      const detik = waktu.getSeconds().toString().padStart(2, '0');
+      document.getElementById("jam").innerText = "Waktu saat ini: " + jam + ":" + menit + ":" + detik;
+    }
+
+    setInterval(tampilkanJam, 1000);
+    tampilkanJam();
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const keranjangDiv = document.getElementById("keranjang");
+
+    let total = 0;
+    function tampilkanKeranjang() {
+      if (cart.length === 0) {
+        keranjangDiv.innerHTML = '<p class="empty-msg">Keranjang belanja kosong.</p>';
+        return;
+      }
+
+      let html = `<table>
+        <thead><tr><th>Produk</th><th>Harga</th></tr></thead><tbody>`;
+
+      cart.forEach(item => {
+        html += `<tr><td>${item.nama}</td><td>Rp${item.harga.toLocaleString()}</td></tr>`;
+        total += item.harga;
+      });
+
+      html += `</tbody></table><div class="total">Total: Rp${total.toLocaleString()}</div>`;
+      keranjangDiv.innerHTML = html;
+    }
+
+    tampilkanKeranjang();
+
+    // Handle submit form
+    document.getElementById("checkoutForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const nama = document.getElementById("nama").value;
+      const telepon = document.getElementById("telepon").value;
+      const alamat = document.getElementById("alamat").value;
+      const waktu = new Date().toLocaleString();
+
+      const tbody = document.getElementById("tabelBody");
+      const row = tbody.insertRow();
+      row.insertCell(0).textContent = nama;
+      row.insertCell(1).textContent = telepon;
+      row.insertCell(2).textContent = alamat;
+      row.insertCell(3).textContent = "Rp" + total.toLocaleString();
+      row.insertCell(4).textContent = waktu;
+
+      document.getElementById("tabelPesanan").style.display = "table";
+      document.getElementById("checkoutForm").reset();
+      localStorage.removeItem("cart");
+      keranjangDiv.innerHTML = '<p class="empty-msg">Keranjang belanja kosong.</p>';
+    });
+
+    function batalPesanan() {
+      if (confirm("Yakin ingin membatalkan semua pesanan?")) {
+        document.getElementById("tabelBody").innerHTML = "";
+        document.getElementById("tabelPesanan").style.display = "none";
+        localStorage.removeItem("cart");
+        keranjangDiv.innerHTML = '<p class="empty-msg">Keranjang belanja kosong.</p>';
+      }
+    }
+  </script>
+
+</body>
+</html>

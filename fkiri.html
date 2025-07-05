@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<title>Menu Toko Sembako Vina</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f0e6;
+    color: #4b2e1e;
+    margin: 0; 
+    padding: 20px;
+  }
+  .menu h2 {
+    color: #7a5e42;
+  }
+  hr {
+    border: none;
+    border-bottom: 1px solid #7a5e42;
+    margin: 10px 0 20px 0;
+  }
+  a, .toggle {
+    display: block;
+    padding: 10px 15px;
+    color: #7a5e42;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    user-select: none;
+  }
+  a:hover, .toggle:hover {
+    background-color: #7a5e42;
+    color: white;
+  }
+  .submenu {
+    display: none;
+    margin-left: 15px;
+    margin-bottom: 10px;
+  }
+  .submenu a {
+    padding: 8px 15px;
+    font-weight: 400;
+    background-color: #e2c9aa;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    color: #4b2e1e;
+  }
+  .submenu a:hover {
+    background-color: #c3aa87;
+    color: white;
+  }
+</style>
+</head>
+<body>
+  <div class="menu">
+    <h2>MENU</h2>
+    <hr>
+    <a href="home.html" target="kanan">Home</a>
+
+    <div class="toggle" onclick="toggleSubmenu('materi')">Produk</div>
+    <div class="submenu" id="materi">
+      
+      <a href="makanan.html" target="kanan">Sembako</a>
+    </div>
+
+    <a href="form.html" target="kanan">Form Order</a>
+    <hr>
+  </div>
+
+  <script>
+    function toggleSubmenu(id) {
+      const submenu = document.getElementById(id);
+      submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</body>
+</html>
